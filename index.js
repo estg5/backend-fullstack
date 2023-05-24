@@ -8,6 +8,7 @@ morgan.token("data", (req) => {
 });
 
 app.use(cors());
+app.use(express.static("build"));
 app.use(json());
 app.use(
   morgan(
