@@ -105,5 +105,5 @@ app.post("/api/persons", (req, res) => {
   res.status(200).json(person);
 });
 
-const PORT = 3002;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT);
