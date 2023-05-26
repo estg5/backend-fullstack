@@ -57,7 +57,7 @@ app.delete("/api/persons/:id", (req, res) => {
   );
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const data = req.body;
 
   if (!(data.name && data.number)) {
@@ -74,7 +74,10 @@ app.post("/api/persons", (req, res) => {
       number: data.number,
     });
 
-    person.save().then((savedPerson) => res.status(200).json(savedPerson));
+    person
+      .save()
+      .then((savedPerson) => res.status(200).json(savedPerson))
+      .catch((err) => next(err));
   });
 });
 
@@ -86,7 +89,11 @@ app.put("/api/persons/:id", (req, res, next) => {
     number: data.number,
   };
 
-  Person.findByIdAndUpdate(req.params.id, person, { new: true })
+  Person.findByIdAndUpdate(req.params.id, person, {
+    new: true,
+    runValidators: true,
+    context: "query",
+  })
     .then((updatedPerson) => {
       res.json(updatedPerson);
     })
@@ -97,7 +104,9 @@ const errorHandler = (error, req, res, next) => {
   console.log(error.message);
 
   if (error.name === "CastError") {
-    return response.status(400).send({ error: "malformatted id" });
+    return res.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return res.status(400).send({ error: error.message });
   }
 
   next(error);
