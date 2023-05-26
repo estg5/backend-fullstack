@@ -53,11 +53,6 @@ let db = [
   },
 ];
 
-const generateId = () => {
-  const maxId = Math.max(...db.map((p) => p.id));
-  return maxId + 1;
-};
-
 app.get("/info", (req, res) => {
   const html = `<p>Phonebook has info for ${db.length} people</p>
     <p>${new Date()}</p>
@@ -79,10 +74,9 @@ app.get("/api/persons/:id", (req, res) => {
 });
 
 app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  db = db.filter((p) => p.id !== id);
-
-  res.status(204).end();
+  Person.findByIdAndRemove(req.params.id).then((result) =>
+    res.status(204).end()
+  );
 });
 
 app.post("/api/persons", (req, res) => {
