@@ -92,19 +92,18 @@ app.post("/api/persons", (req, res) => {
     return res.status(400).json({ error: "name and number are required" });
   }
 
-  const exists = db.find((p) => p.name === data.name);
-  if (exists) {
-    return res.status(400).json({ error: "name must be unique" });
-  }
+  Person.findOne({ name: data.name }).then((p) => {
+    if (p !== null) {
+      return res.status(400).json({ error: "name must be unique" });
+    }
 
-  const person = {
-    id: generateId(),
-    name: data.name,
-    number: data.number,
-  };
+    const person = new Person({
+      name: data.name,
+      number: data.number,
+    });
 
-  db = db.concat(person);
-  res.status(200).json(person);
+    person.save().then((savedPerson) => res.status(200).json(savedPerson));
+  });
 });
 
 const PORT = process.env.PORT;
