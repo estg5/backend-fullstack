@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
 dotenv.config();
 
 const url = process.env.MONGODB_URI;
@@ -11,7 +12,7 @@ const schema = new mongoose.Schema({
   number: String,
 });
 
-const Person = mongoose.model("Person", schema);
+const Person = mongoose.model('Person', schema);
 
 if (process.argv.length < 4) {
   Person.find({}).then((res) => {
@@ -27,7 +28,7 @@ if (process.argv.length < 4) {
     number,
   });
 
-  newPerson.save().then((res) => {
+  newPerson.save().then(() => {
     console.log(`added ${name} number ${number} to phonebook`);
   });
 }
