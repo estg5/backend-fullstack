@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import morgan from "morgan";
 import cors from "cors";
+import Person from "./models/person.js";
 
 const app = express();
 morgan.token("data", (req) => {
@@ -64,7 +65,7 @@ app.get("/info", (req, res) => {
   res.send(html);
 });
 
-app.get("/api/persons", (req, res) => res.json(db));
+app.get("/api/persons", (req, res) => Person.find({}).then((p) => res.json(p)));
 
 app.get("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
@@ -106,5 +107,5 @@ app.post("/api/persons", (req, res) => {
   res.status(200).json(person);
 });
 
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT;
 app.listen(PORT);

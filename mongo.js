@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-const url = `mongodb+srv://zeth1488:${process.env.MONGO_PASS}@cluster0.yoc8nqw.mongodb.net/phonebookApp?retryWrites=true&w=majority`;
+const url = process.env.MONGODB_URI;
 
 mongoose.connect(url);
 
