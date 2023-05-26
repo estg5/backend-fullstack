@@ -1,7 +1,8 @@
 import express, { json } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import Person from './models/person';
+// eslint-disable-next-line import/extensions
+import Person from './models/person.js';
 
 const app = express();
 morgan.token('data', (req) => JSON.stringify(req.body));
